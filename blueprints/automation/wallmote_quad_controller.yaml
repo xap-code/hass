@@ -1,0 +1,299 @@
+blueprint:
+  name: Wallmote Quad Controller
+  description: Run scripts based on a Wallmote Quad's events
+  domain: automation
+  source_url: https://github.com/xap-code/homeassistant/blob/blueprints/automation/wallmote_quad_controller.yaml
+  author: xap
+  input:
+    controller:
+      name: Wallmote Quad Device
+      selector:
+        device:
+          domain: zwave_js
+          manufacturer: AEON Labs
+          model: ZW130
+
+    button_1_pressed:
+      name: Button 1 Pressed
+      default:
+      selector:
+        action:
+    button_1_held:
+      name: Button 1 Held
+      default:
+      selector:
+        action:
+    button_1_up:
+      name: Button 1 Slide Up
+      default:
+      selector:
+        action:
+    button_1_down:
+      name: Button 1 Slide Down
+      default:
+      selector:
+        action:
+
+    button_2_pressed:
+      name: Button 2 Pressed
+      default:
+      selector:
+        action:
+    button_2_held:
+      name: Button 2 Held
+      default:
+      selector:
+        action:
+    button_2_up:
+      name: Button 2 Slide Up
+      default:
+      selector:
+        action:
+    button_2_down:
+      name: Button 2 Slide Down
+      default:
+      selector:
+        action:
+
+    button_3_pressed:
+      name: Button 3 Pressed
+      default:
+      selector:
+        action:
+    button_3_held:
+      name: Button 3 Held
+      default:
+      selector:
+        action:
+    button_3_up:
+      name: Button 3 Slide Up
+      default:
+      selector:
+        action:
+    button_3_down:
+      name: Button 3 Slide Down
+      default:
+      selector:
+        action:
+
+    button_4_pressed:
+      name: Button 4 Pressed
+      default:
+      selector:
+        action:
+    button_4_held:
+      name: Button 4 Held
+      default:
+      selector:
+        action:
+    button_4_up:
+      name: Button 4 Slide Up
+      default:
+      selector:
+        action:
+    button_4_down:
+      name: Button 4 Slide Down
+      default:
+      selector:
+        action:
+
+trigger:
+
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "001"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 001
+    value: 0
+    id: 1_pressed
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "001"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 001
+    value: 1
+    id: 1_held
+
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "002"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 002
+    id: 2_pressed
+    value: 0
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "002"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 002
+    id: 2_held
+    value: 1
+
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "003"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 003
+    id: 3_pressed
+    value: 0
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "003"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 003
+    id: 3_held
+    value: 1
+
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "004"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 004
+    id: 4_pressed
+    value: 0
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: event.value_notification.central_scene
+    property: scene
+    property_key: "004"
+    endpoint: 0
+    command_class: 91
+    subtype: Endpoint 0 Scene 004
+    id: 4_held
+    value: 1
+
+  - platform: device
+    device_id: !input controller
+    domain: zwave_js
+    type: zwave_js.value_updated.config_parameter
+    property: 10
+    property_key: null
+    endpoint: 0
+    command_class: 112
+    subtype: 10 (param010) on endpoint 0
+    id: slide
+
+action:
+  - choose:
+
+      - conditions:
+          - condition: trigger
+            id:
+              - 1_pressed
+        sequence: !input button_1_pressed
+      - conditions:
+          - condition: trigger
+            id:
+              - 1_held
+        sequence: !input button_1_held
+
+      - conditions:
+          - condition: trigger
+            id:
+              - 2_pressed
+        sequence: !input button_2_pressed
+      - conditions:
+          - condition: trigger
+            id:
+              - 2_held
+        sequence: !input button_2_held
+
+      - conditions:
+          - condition: trigger
+            id:
+              - 3_pressed
+        sequence: !input button_3_pressed
+      - conditions:
+          - condition: trigger
+            id:
+              - 3_held
+        sequence: !input button_3_held
+
+      - conditions:
+          - condition: trigger
+            id:
+              - 4_pressed
+        sequence: !input button_4_pressed
+      - conditions:
+          - condition: trigger
+            id:
+              - 4_held
+        sequence: !input button_4_held
+
+      - conditions:
+          - condition: trigger
+            id:
+              - slide
+        sequence:
+          - variables:
+              scene_id: >-
+                {{ (trigger.current_value | int /2**24)  | int | bitwise_and(0xff) }}
+              direction: >-
+                {{ (trigger.current_value | int /2**16)  | int | bitwise_and(0xff) }}
+          - choose:
+
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 1 and direction == 1 }}"
+                sequence: !input button_1_up
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 1 and direction == 0 }}"
+                sequence: !input button_1_down
+
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 2 and direction == 1 }}"
+                sequence: !input button_2_up
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 2 and direction == 0 }}"
+                sequence: !input button_2_down
+
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 3 and direction == 1 }}"
+                sequence: !input button_3_up
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 3 and direction == 0 }}"
+                sequence: !input button_3_down
+
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 4 and direction == 1 }}"
+                sequence: !input button_4_up
+              - conditions:
+                  - condition: template
+                    value_template: "{{ scene_id == 4 and direction == 0 }}"
+                sequence: !input button_4_down
+
