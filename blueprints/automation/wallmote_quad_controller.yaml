@@ -1,6 +1,6 @@
 blueprint:
   name: Wallmote Quad Controller
-  description: Run scripts based on a Wallmote Quad's events
+  description: Execute actions based on a Wallmote Quad's events
   domain: automation
   source_url: https://raw.githubusercontent.com/xap-code/hass/main/blueprints/automation/wallmote_quad_controller.yaml
   author: xap
