@@ -9,7 +9,7 @@ blueprint:
       name: Wallmote Quad Device
       selector:
         device:
-          domain: zwave_js
+          integration: zwave_js
           manufacturer: AEON Labs
           model: ZW130
 
