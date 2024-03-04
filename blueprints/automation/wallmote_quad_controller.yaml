@@ -296,4 +296,6 @@ action:
                   - condition: template
                     value_template: "{{ scene_id == 4 and direction == 0 }}"
                 sequence: !input button_4_down
-
+mode: single
+max_exceeded: silent
+              
